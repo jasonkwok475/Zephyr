@@ -26,7 +26,11 @@ void loop() {
   }
   if (!STARTED) return;
 
+  // Internal refresh ~50ms
+  // Radio/BT refresh ~500ms - send packets of information from the past 500ms
+
   if (MPU::connected) BT::Bt_Send_Data(1, MPU::getGyroData());
+  if (BMP::connected) BT::Bt_Send_Data(1, BMP::getData());
 
   delay(100);
 }

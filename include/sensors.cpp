@@ -7,20 +7,22 @@
 Adafruit_MPU6050 mpu;
 Adafruit_BMP085 bmp;
 
+sensors_event_t a, g, temp;
+
 namespace MPU {
   bool connected = false;
 
   void init() {
     // Initialize MPU
-    if (!mpu.begin()) return Serial.println("Failed to find MPU6050 chip");
-
-    Serial.println("MPU6050 Found!");
-    connected = true;
+    if (mpu.begin()) {
+      Serial.println("MPU6050 Found!");
+      connected = true;
+    }
+    Serial.println("Failed to find MPU6050 chip");
   }
 
   String getGyroData() {
     /* Get new sensor events with the readings */
-    sensors_event_t a, g, temp;
     mpu.getEvent(&a, &g, &temp);
     
     //https://wiki.dfrobot.com/How_to_Use_a_Three-Axis_Accelerometer_for_Tilt_Sensing
@@ -42,9 +44,23 @@ namespace BMP {
 
   void init() {
     // Initialize BMP
-    if (!bmp.begin()) return Serial.println("Failed to find BMP180 chip");
+    if (bmp.begin()) {
+      Serial.println("BMP180 Found!");
+      connected = true;
+    }
+    Serial.println("Failed to find BMP180 chip");
     
-    Serial.println("BMP180 Found!");
-    connected = true;
+  }
+
+  String getData() {
+    String data;
+    JsonDocument doc; // allocates in the heap
+    doc["altitude"] = bmp.readAltitude();
+    doc["pressure"] = bmp.readPressure();
+    doc["temp"] = bmp.readTemperature();
+    doc["time"] = millis();
+    serializeJson(doc, data);
+
+    return data;
   }
 }

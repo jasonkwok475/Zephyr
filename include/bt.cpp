@@ -1,5 +1,9 @@
 #include "BluetoothSerial.h"
 #include <ArduinoJson.h>
+#include <vector>
+#include "detail/config.cpp"
+
+#include "detail/structures.cpp"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -29,18 +33,27 @@ namespace BT {
 
   }
 
-  void Bt_Send_Data(int type, String data) {
-
-    // Type 0: Log data
-    // Type 1: Gyro
-    String formatted;
-    JsonDocument doc; // allocates in the heap
-    doc["type"] = type;
-    doc["data"] = data;
-    serializeJson(doc, formatted);
-    uint8_t buf[formatted.length()];
-
-    memcpy(buf,formatted.c_str(),formatted.length());
-    SerialBT.write(buf,formatted.length());
+  void Bt_Send_Packets(packet data[UPDATE_RATE]) {
+    std::vector<uint8_t> bytes(sizeof(data));
+    memcpy(bytes.data(), reinterpret_cast<void*>(&data), sizeof(data));
+    SerialBT.write(bytes.data(), sizeof(data));
   }
+
+  // void Bt_Send_Data(int type, string data) {
+
+  //   // Type 0: Log data
+  //   // Type 1: Gyro
+  //   String formatted;
+  //   JsonDocument doc; // allocates in the heap
+  //   doc["type"] = type;
+  //   doc["data"] = data;
+  //   serializeJson(doc, formatted);
+  //   uint8_t buf[formatted.length()];
+
+  //   vector<std::uint8_t> bytes(sizeof(data));
+  //   memcpy(bytes.data(), reinterpret_cast<void*>(&data), sizeof(data));
+
+  //   memcpy(buf,formatted.c_str(),formatted.length());
+  //   SerialBT.write(buf,formatted.length());
+  // }
 };

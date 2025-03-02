@@ -10,12 +10,17 @@ struct vec {
 struct packet {
   vec accel;
   vec rot_accel;
-  vec position;
+  vec position; // TODO: Change to gps position?
   vec angle;
   float temperature;
   float pressure;
   float altitude;
   unsigned long time;
+};
+
+struct SensorEvents {
+  bool mpu = false;
+  bool bmp = false;
 };
 
 #endif

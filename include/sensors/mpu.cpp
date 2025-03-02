@@ -3,7 +3,7 @@
 #include <Wire.h>
 #include <ArduinoJson.h>
 
-#include "detail/structures.cpp"
+#include "detail/structures.h"
 
 Adafruit_MPU6050 mpu6050;
 sensors_event_t a, g, temp;
@@ -21,16 +21,12 @@ class MPU {
     vec angle = { 0, 0, 0 };
     vec rot_accel = { 0, 0, 0 };
 
-    HardwareSerial& _Serial;
-
-    MPU(HardwareSerial& serial) :
-      _Serial(serial)
-    {
+    MPU() {
       // Initialize MPU
       if (mpu6050.begin()) {
-        _Serial.println("MPU6050 Found!");
+        //_Serial.println("MPU6050 Found!");
         connected = true;
-      } else _Serial.println("Failed to find MPU6050 chip");
+      } //else _Serial.println("Failed to find MPU6050 chip");
     }
     
     void refreshData() {

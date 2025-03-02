@@ -3,7 +3,7 @@
 #include <vector>
 #include "detail/config.cpp"
 
-#include "detail/structures.cpp"
+#include "detail/structures.h"
 
 #if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
 #error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
@@ -33,10 +33,10 @@ namespace BT {
 
   }
 
-  void Bt_Send_Packets(packet data[UPDATE_RATE]) {
-    std::vector<uint8_t> bytes(sizeof(data));
-    memcpy(bytes.data(), reinterpret_cast<void*>(&data), sizeof(data));
-    SerialBT.write(bytes.data(), sizeof(data));
+  void Bt_Send_Packets(packet data, int size) {
+    std::vector<uint8_t> bytes(size);
+    memcpy(bytes.data(), reinterpret_cast<void*>(&data), size);
+    SerialBT.write(bytes.data(), size);
   }
 
   // void Bt_Send_Data(int type, string data) {

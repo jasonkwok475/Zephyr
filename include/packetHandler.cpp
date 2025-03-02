@@ -1,4 +1,4 @@
-#include "detail/structures.cpp"
+#include "detail/structures.h"
 #include "detail/config.cpp"
 
 namespace packetHandler {
@@ -10,6 +10,10 @@ namespace packetHandler {
   }
 
   void addPacket(packet p, int i) {
-    packets[i - 1] = p;
+    packets[i] = p;
+  }
+
+  int packetSize() {
+    return sizeof(packets);
   }
 }

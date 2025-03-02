@@ -1,20 +1,17 @@
 #include "sensors/mpu.cpp"
 #include "sensors/bmp.cpp"
 
-#include "detail/structures.cpp" // TODO: Change to header file?
+#include "detail/structures.h" 
 #include "HardwareSerial.h"
 
 class Sensors {
   public:
-    HardwareSerial& _Serial;
     MPU* mpu;
     BMP* bmp;
 
-    Sensors(HardwareSerial& serial) :
-      _Serial(serial)
-    {
-      mpu = new MPU(_Serial);
-      bmp = new BMP(_Serial);
+    Sensors() {
+      mpu = new MPU();
+      bmp = new BMP();
     }
 
     packet getPacket() {

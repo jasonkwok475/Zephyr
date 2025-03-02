@@ -3,6 +3,7 @@
 #include "sensors.cpp"
 #include "detail/config.cpp"
 #include "packetHandler.cpp"
+#include "detail/structures.h"
 
 using namespace std;
 
@@ -10,6 +11,7 @@ bool STARTED = false;
 int count_since_last_updated = 0;
 
 Sensors* sensors;
+SensorEvents sens_events; // Whether Nova wants to be subscribed to certain events
 
 void setup() {
   Serial.begin(115200);
@@ -20,7 +22,7 @@ void setup() {
 
   SerialBT.register_callback(BT::Bt_Status);
 
-  sensors = new Sensors(&Serial); // TODO: Use stream
+  sensors = new Sensors();
   delay(1000);
 }
 
@@ -34,16 +36,16 @@ void loop() {
 
   
   if (STARTED) {
-    Serial.print("started!");
     //BT::Bt_Data_Received(SerialBT.read());
     analogWrite(17, 100);
-    Serial.print(count_since_last_updated);
     if (count_since_last_updated == UPDATE_RATE) {
       count_since_last_updated = 0;
-      BT::Bt_Send_Packets(packetHandler::packets);
+      packet p = sensors->getPacket();
+      BT::Bt_Send_Packets(p, sizeof(p));
     } else {
+      packet p = sensors->getPacket();
+      packetHandler::addPacket(p, count_since_last_updated);
       count_since_last_updated++;
-      packetHandler::addPacket(sensors->getPacket(), count_since_last_updated);
     }
 
 // char accelbuffer[500];

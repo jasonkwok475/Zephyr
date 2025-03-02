@@ -12,16 +12,13 @@ class BMP {
     float pressure;
     float altitude;
 
-    HardwareSerial& _Serial;
 
-    BMP(HardwareSerial& serial) :
-      _Serial(serial)
-    {
+    BMP() {
       // Initialize BMP
       if (bmp180.begin()) {
-        _Serial.println("BMP180 Found!");
+        //_Serial.println("BMP180 Found!");
         connected = true;
-      } else _Serial.println("Failed to find BMP180 chip");
+      } //else _Serial.println("Failed to find BMP180 chip");
     }
 
     void refreshData() {

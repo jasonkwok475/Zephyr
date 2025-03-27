@@ -10,7 +10,7 @@ struct vec {
 struct packet {
   vec accel;
   vec rot_accel;
-  vec position; // TODO: Change to gps position?
+  //vec position; // TODO: Change to gps position?
   vec angle;
   float temperature;
   float pressure;
@@ -19,8 +19,10 @@ struct packet {
 };
 
 struct SensorEvents {
-  bool mpu = false;
-  bool bmp = false;
+  bool altitude = false;
+  bool temperature = false;
+  bool angle = false;
+  bool throttle = false;
 };
 
 #endif

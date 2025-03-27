@@ -14,14 +14,15 @@ class Sensors {
       bmp = new BMP();
     }
 
-    packet getPacket() {
-      mpu->refreshData();
+    void refreshData(unsigned long dt) {
+      mpu->refreshData(dt);
       bmp->refreshData();
+    }
 
+    packet getPacket() {
       return packet {
         mpu->accel,
-        mpu->rot_accel,
-        mpu->position,
+        mpu->omega,
         mpu->angle,
         bmp->temperature,
         bmp->pressure,
